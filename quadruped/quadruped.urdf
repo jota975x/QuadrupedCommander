@@ -5,10 +5,22 @@
   <color rgba="0.700 0.700 0.700 1.000"/>
 </material>
 
+<material name="red">
+  <color rgba="0.800 0.100 0.100 1.000"/>
+</material>
+
+<material name="white">
+  <color rgba="1.000 1.000 1.000 1.000"/>
+</material>
+
+<material name="black">
+  <color rgba="0.000 0.000 0.000 1.000"/>
+</material>
+
 <link name="base_link">
   <inertial>
     <origin xyz="2.9883837951735975e-06 0.039780613677239535 0.47410629746610494" rpy="0 0 0"/>
-    <mass value="44.76275372212462"/>
+    <mass value="10.0"/>
     <inertia ixx="2.3637541744923034" iyy="0.5410784956750021" izz="2.6632359673082435" ixy="-2.0497891611652614e-06" iyz="9.783457932122097e-06" ixz="9.47338184325219e-11"/>
   </inertial>
   <visual>
@@ -16,7 +28,7 @@
     <geometry>
       <mesh filename="meshes/base_link.stl" scale="0.001 0.001 0.001"/>
     </geometry>
-    <material name="silver"/>
+    <material name="red"/>
     <material/>
   </visual>
   <collision>
@@ -30,7 +42,7 @@
 <link name="hipFL1">
   <inertial>
     <origin xyz="0.028977503820283426 -0.039754030548852015 2.944583516462096e-07" rpy="0 0 0"/>
-    <mass value="1.459703797805085"/>
+    <mass value="0.5"/>
     <inertia ixx="0.002342166894850506" iyy="0.0045940713120806165" izz="0.0037937417042337995" ixy="-2.6653779135875355e-05" iyz="2.7755575615628914e-17" ixz="0.0"/>
   </inertial>
   <visual>
@@ -52,7 +64,7 @@
 <link name="hipFR1">
   <inertial>
     <origin xyz="-0.028976862375981988 -0.039754030548852015 2.944583516462096e-07" rpy="0 0 0"/>
-    <mass value="1.459703797805085"/>
+    <mass value="0.5"/>
     <inertia ixx="0.002342166894850506" iyy="0.0045940713120806165" izz="0.0037937417042337718" ixy="2.6653779135861477e-05" iyz="2.7755575615628914e-17" ixz="1.3877787807814457e-17"/>
   </inertial>
   <visual>
@@ -74,7 +86,7 @@
 <link name="hipBR1">
   <inertial>
     <origin xyz="-0.028976862375981988 0.039754605788009156 2.9445834553998296e-07" rpy="0 0 0"/>
-    <mass value="1.459703797805085"/>
+    <mass value="0.5"/>
     <inertia ixx="0.0023421668948505614" iyy="0.0045940713120806165" izz="0.003793741704233855" ixy="-2.665377913584066e-05" iyz="0.0" ixz="1.3877787807814457e-17"/>
   </inertial>
   <visual>
@@ -96,7 +108,7 @@
 <link name="hipBL1">
   <inertial>
     <origin xyz="0.028977503820283426 0.03975460578800927 2.9445834565100526e-07" rpy="0 0 0"/>
-    <mass value="1.459703797805085"/>
+    <mass value="0.5"/>
     <inertia ixx="0.0023421668948503394" iyy="0.0045940713120805055" izz="0.003793741704233744" ixy="2.6653779135882294e-05" iyz="0.0" ixz="0.0"/>
   </inertial>
   <visual>
@@ -118,7 +130,7 @@
 <link name="legFL1">
   <inertial>
     <origin xyz="0.020000320722150494 0.10090759547150757 -0.10090701339357744" rpy="0 0 0"/>
-    <mass value="0.5177742031085164"/>
+    <mass value="1.0"/>
     <inertia ixx="0.004772247916842248" iyy="0.002478868408036697" izz="0.00247886840803669" ixy="-2.7755575615628914e-17" iyz="0.0023133288373264164" ixz="-3.469446951953614e-17"/>
   </inertial>
   <visual>
@@ -140,7 +152,7 @@
 <link name="legBl1">
   <inertial>
     <origin xyz="0.020000320722150494 -0.10090702023235143 -0.10090701339358243" rpy="0 0 0"/>
-    <mass value="0.5177742031085164"/>
+    <mass value="1.0"/>
     <inertia ixx="0.004772247916842262" iyy="0.0024788684080366413" izz="0.0024788684080367523" ixy="-3.469446951953614e-17" iyz="-0.0023133288373264407" ixz="2.7755575615628914e-17"/>
   </inertial>
   <visual>
@@ -162,7 +174,7 @@
 <link name="legFR1">
   <inertial>
     <origin xyz="-0.019999679277849014 0.10090759547150766 -0.10090701339357716" rpy="0 0 0"/>
-    <mass value="0.5177742031085164"/>
+    <mass value="1.0"/>
     <inertia ixx="0.004772247916842248" iyy="0.002478868408036697" izz="0.002478868408036697" ixy="-2.7755575615628914e-17" iyz="0.002313328837326434" ixz="-2.0816681711721685e-17"/>
   </inertial>
   <visual>
@@ -184,7 +196,7 @@
 <link name="legBR1">
   <inertial>
     <origin xyz="-0.019999679277849014 -0.10090702023235143 -0.10090701339358227" rpy="0 0 0"/>
-    <mass value="0.5177742031085164"/>
+    <mass value="1.0"/>
     <inertia ixx="0.004772247916842262" iyy="0.0024788684080366413" izz="0.0024788684080367385" ixy="-2.0816681711721685e-17" iyz="-0.002313328837326427" ixz="2.7755575615628914e-17"/>
   </inertial>
   <visual>
@@ -206,7 +218,7 @@
 <link name="calfFL1">
   <inertial>
     <origin xyz="0.020000320722150494 -0.1590089499844665 -0.1590090118576217" rpy="0 0 0"/>
-    <mass value="0.45030095449806384"/>
+    <mass value="2.0"/>
     <inertia ixx="0.00498391749616179" iyy="0.002555772925631916" izz="0.0025557729256318953" ixy="-3.469446951953614e-18" iyz="-0.002421268606464846" ixz="0.0"/>
   </inertial>
   <visual>
@@ -214,7 +226,7 @@
     <geometry>
       <mesh filename="meshes/calfFL1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
-    <material name="silver"/>
+    <material name="white"/>
     <material/>
   </visual>
   <collision>
@@ -228,7 +240,7 @@
 <link name="calfBL1">
   <inertial>
     <origin xyz="0.020000320722150494 0.15900952522361986 -0.15900901185762717" rpy="0 0 0"/>
-    <mass value="0.45030095449806384"/>
+    <mass value="2.0"/>
     <inertia ixx="0.0049839174961618035" iyy="0.002555772925631951" izz="0.0025557729256318606" ixy="0.0" iyz="0.002421268606464846" ixz="3.469446951953614e-18"/>
   </inertial>
   <visual>
@@ -236,7 +248,7 @@
     <geometry>
       <mesh filename="meshes/calfBL1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
-    <material name="silver"/>
+    <material name="white"/>
     <material/>
   </visual>
   <collision>
@@ -250,7 +262,7 @@
 <link name="calfFR1">
   <inertial>
     <origin xyz="-0.019999679277849014 -0.1590089499844662 -0.1590090118576214" rpy="0 0 0"/>
-    <mass value="0.45030095449806384"/>
+    <mass value="2.0"/>
     <inertia ixx="0.004983917496161807" iyy="0.002555772925631916" izz="0.0025557729256319023" ixy="3.469446951953614e-18" iyz="-0.002421268606464846" ixz="-1.734723475976807e-18"/>
   </inertial>
   <visual>
@@ -258,7 +270,7 @@
     <geometry>
       <mesh filename="meshes/calfFR1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
-    <material name="silver"/>
+    <material name="white"/>
     <material/>
   </visual>
   <collision>
@@ -272,7 +284,7 @@
 <link name="calfBR1">
   <inertial>
     <origin xyz="-0.019999679277849014 0.15900952522362002 -0.1590090118576271" rpy="0 0 0"/>
-    <mass value="0.45030095449806384"/>
+    <mass value="2.0"/>
     <inertia ixx="0.004983917496161797" iyy="0.0025557729256319474" izz="0.0025557729256318606" ixy="-6.938893903907228e-18" iyz="0.002421268606464848" ixz="0.0"/>
   </inertial>
   <visual>
@@ -280,13 +292,35 @@
     <geometry>
       <mesh filename="meshes/calfBR1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
-    <material name="silver"/>
+    <material name="white"/>
     <material/>
   </visual>
   <collision>
     <origin xyz="0.202997 -0.19197 -0.261973" rpy="0 0 0"/>
     <geometry>
       <mesh filename="meshes/calfBR1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="lidar1">
+  <inertial>
+    <origin xyz="-1.8093822187881343e-18 0.02500028761957951 0.002500294458353536" rpy="0 0 0"/>
+    <mass value="0.01926679869584365"/>
+    <inertia ixx="7.927484880054098e-07" iyy="7.927484880062771e-07" izz="1.505218648112372e-06" ixy="-1.0458300891968916e-21" iyz="0.0" ixz="8.71525074330748e-23"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.0 0.425898 -0.569105" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/lidar1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="black"/>
+    <material/>
+  </visual>
+  <collision>
+    <origin xyz="-0.0 0.425898 -0.569105" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/lidar1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>
@@ -494,5 +528,11 @@
     <mechanicalReduction>1</mechanicalReduction>
   </actuator>
 </transmission>
+
+<joint name="Rigid_14" type="fixed">
+  <origin xyz="0.0 -0.425898 0.569105" rpy="0 0 -1.57079632679"/>
+  <parent link="base_link"/>
+  <child link="lidar1"/>
+</joint>
 
 </robot>
