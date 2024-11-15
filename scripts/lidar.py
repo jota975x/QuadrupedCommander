@@ -22,7 +22,6 @@ def lidar_sim(robot_id, lidar_idx, num_beams=360, range=5.0):
         hit_distance = range    # default to max range if no hit
         if hit_result[0][0] != -1:
             hit_distance = hit_result[0][3][0]
-            print(angle)
             
         lidar_data.append(hit_distance)
         
