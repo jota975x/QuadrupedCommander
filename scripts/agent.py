@@ -128,7 +128,8 @@ class AgentSAC(nn.Module):
         self.TargetCritic.load_state_dict(self.Critic.state_dict())
         
         # Define Replay Buffer
-        self.memory = ReplayBuffer(capacity=buffer_size, batch_size=batch_size)
+        self.batch_size = batch_size
+        self.buffer = ReplayBuffer(capacity=buffer_size, batch_size=batch_size)
         
         # Create Optimizers
         self.actor_optim = optim.Adam(self.Actor.parameters(), lr=self.actor_lr)
