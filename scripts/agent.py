@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-from buffer import ReplayBuffer
+from scripts.buffer import ReplayBuffer
 
 # HYPERPARAMETERS
 A_HIDDEN_DIM = 128
@@ -26,7 +26,7 @@ class Actor(nn.Module):
     def __init__(self, state_dim, action_dim, hidden_dim: int=A_HIDDEN_DIM,
                  eps: float=EPS, log_sig_min: float=LOG_SIG_MIN, log_sig_max: float=LOG_SIG_MAX,
                  action_min: float=ACTION_MIN, action_max: float=ACTION_MAX):
-        super(Actor).__init__()
+        super(Actor, self).__init__()
         
         # Store variables
         self.log_sig_min = log_sig_min
@@ -45,8 +45,8 @@ class Actor(nn.Module):
         self.activation = nn.ReLU()
         
         # Scale actions
-        self.action_scale = torch.FloatTensor(action_max - action_min).to(device)
-        self.action_shift = torch.FloatTensor(action_min).to(device)
+        self.action_scale = torch.tensor(action_max - action_min).to(device)
+        self.action_shift = torch.tensor(action_min).to(device)
         
         
     def forward(self, state):
@@ -62,6 +62,7 @@ class Actor(nn.Module):
     
     # USE THIS FUNCTION TO GET THE ACTIONS
     def sample(self, state):
+        state = torch.tensor(state).to(device)
         mean, log_std = self.forward(state)
         std = log_std.exp()
         
@@ -78,16 +79,21 @@ class Actor(nn.Module):
         return action, log_prob, mean        
     
 
-# TODO consider using two Q networks as done in homework
+# Double Critic
 class Critic(nn.Module):
     def __init__(self, state_dim, action_dim, hidden_dim: int=C_HIDDEN_DIM):
-        super(Critic).__init__()
+        super(Critic, self).__init__()
         
         # Create Critic Network
-        self.fc1 = nn.Linear(state_dim + action_dim, hidden_dim)
-        self.fc2 = nn.Linear(hidden_dim, hidden_dim)
-        self.fc3 = nn.Linear(hidden_dim, hidden_dim)
-        self.fc4 = nn.Linear(hidden_dim, 1)
+        self.q1_fc1 = nn.Linear(state_dim + action_dim, hidden_dim)
+        self.q1_fc2 = nn.Linear(hidden_dim, hidden_dim)
+        self.q1_fc3 = nn.Linear(hidden_dim, hidden_dim)
+        self.q1_fc4 = nn.Linear(hidden_dim, 1)
+        
+        self.q2_fc1 = nn.Linear(state_dim + action_dim, hidden_dim)
+        self.q2_fc2 = nn.Linear(hidden_dim, hidden_dim)
+        self.q2_fc3 = nn.Linear(hidden_dim, hidden_dim)
+        self.q2_fc4 = nn.Linear(hidden_dim, 1)
         
         # Define activation function
         self.activation = nn.ReLU()
@@ -96,12 +102,17 @@ class Critic(nn.Module):
     def forward(self, states, actions):
         x = torch.cat([states, actions], dim=1)
         
-        x = self.activation(self.fc1(x))
-        x = self.activation(self.fc2(x))
-        x = self.activation(self.fc3(x))
-        x = self.fc4(x)
+        x1 = self.activation(self.q1_fc1(x))
+        x1 = self.activation(self.q1_fc2(x1))
+        x1 = self.activation(self.q1_fc3(x1))
+        x1 = self.q1_fc4(x1)
         
-        return x
+        x2 = self.activation(self.q2_fc1(x))
+        x2 = self.activation(self.q2_fc2(x2))
+        x2 = self.activation(self.q2_fc3(x2))
+        x2 = self.q2_fc4(x2)
+        
+        return x1, x2
         
     
 
@@ -110,7 +121,7 @@ class AgentSAC(nn.Module):
                  alpha: float=ALPHA, tau: float=TAU, gamma: float=GAMMA,
                  actor_lr: float=A_LEARNING_RATE, critic_lr: float=C_LEARNING_RATE,
                  buffer_size: int=BUFFER_SIZE, batch_size: int=BATCH_SIZE):
-        super(AgentSAC).__init__()
+        super(AgentSAC, self).__init__()
         
         # Save variables
         self.alpha = alpha
@@ -156,15 +167,22 @@ class AgentSAC(nn.Module):
         
         # compute q-values for next state-action pairs
         with torch.no_grad():
-            next_q_values = self.TargetCritic(next_states, next_actions)
+            next_q1, next_q2 = self.TargetCritic(next_states, next_actions)
+            next_q_values = torch.min(next_q1, next_q2)
             target_q_values = rewards + self.gamma * (1 - dones) * (next_q_values - self.alpha * next_log_probs)
             
         # get current q-values
-        current_q_values = self.Critic(states, actions)
+        current_q1_values, current_q2_values = self.Critic(states, actions)
         
         # compute critic loss (TD error)
-        q_loss = F.mse_loss(current_q_values, target_q_values)
+        q1_loss = F.mse_loss(current_q1_values, target_q_values)
+        q2_loss = F.mse_loss(current_q2_values, target_q_values)
+        q_loss = q1_loss + q2_loss
         
         self.critic_optim.zero_grad()
         q_loss.backward()
         self.critic_optim.step()
+        
+    def update_target(self):
+        for var, var_target in zip(self.Critic.parameters(), self.TargetCritic.parameters()):
+            var_target.data = self.tau * var.data + (1.0 - self.tau) * var_target.data
