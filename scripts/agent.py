@@ -62,7 +62,7 @@ class Actor(nn.Module):
     
     # USE THIS FUNCTION TO GET THE ACTIONS
     def sample(self, state):
-        state = torch.tensor(state).to(device)
+        state = torch.tensor(state, dtype=torch.float32).to(device)
         mean, log_std = self.forward(state)
         std = log_std.exp()
         

@@ -5,25 +5,25 @@ import numpy as np
 def lidar_sim(robot_id, lidar_idx, num_beams=360, range=5.0):
     # Get LiDAR position and orientation (quaternion) - relative to world
     lidar_pos, lidar_orientation = p.getLinkState(robot_id, lidar_idx)[:2]
-    r_matrix = p.getMatrixFromQuaternion(lidar_orientation)
+    lidar_orientation = p.getEulerFromQuaternion(lidar_orientation)
+    angles = np.linspace(0, 2 * math.pi, num_beams, endpoint=False) + lidar_orientation[2]
     
-    lidar_data = []
-    angle_range = np.linspace(0, 2*np.pi, num_beams)
+    # set up ray_starts and ray_ends
+    ray_starts = np.tile(lidar_pos, (num_beams, 1))
+    ray_ends = np.array([
+        lidar_pos[0] + range * np.cos(angles),
+        lidar_pos[1] + range * np.sin(angles),
+        lidar_pos[2] * np.ones(len(angles))
+    ]).T
 
-    for angle in angle_range:
-        ray_offset = np.array([math.cos(angle), math.sin(angle), 0])
-        ray_direction = np.dot(np.array(r_matrix).reshape(3, 3), ray_offset)
+    # get ray results
+    ray_results = p.rayTestBatch(ray_starts, ray_ends)
+    
+    # Extract LiDAR ranges from ray_results
+    lidar_ranges = []
+    for result in ray_results:
+        hit_fraction = result[2]
+        distance = hit_fraction * range if hit_fraction < 1.0 else range
+        lidar_ranges.append(distance)
         
-        # compute ray ends and check for hits 
-        ray_end = lidar_pos + range * ray_direction
-        hit_result = p.rayTest(lidar_pos, ray_end)
-        
-        # extract information from result
-        hit_distance = range    # default to max range if no hit
-        if hit_result[0][0] != -1:
-            hit_distance = hit_result[0][3][0]
-            
-        lidar_data.append(hit_distance)
-        
-    return np.array(lidar_data)
-        
+    return np.array(lidar_ranges)
